@@ -41,8 +41,13 @@ class App extends React.Component {
     };
 
     async postData(data, key, comment) {
-        const url = `http://133.242.158.143:8100/postdata?key=${key}&data=${data}&comment=${comment}`.replace(/#/g, "%23")
-        return fetch(url)
+        const url = `http://133.242.158.143:8100/postdata?key=${key}&comment=${comment}`
+        const requestOptions ={
+            method: "POST",
+            headers: {"Content-Type": "text/plain"},
+            body: JSON.stringify(data)
+        }
+        return fetch(url, requestOptions)
             .then((res) => res.json())
             .then((res) => {
                 if (res.status === "true") {
@@ -55,7 +60,6 @@ class App extends React.Component {
 
     handleClickLangs(lang) {
         const selectStmt = Object.keys(this.state.data[lang].statement)[0]
-        console.log(selectStmt)
         this.setState({
             selectStmt: selectStmt,
             selectLang: lang,
@@ -125,7 +129,6 @@ class App extends React.Component {
     };
 
     handleClickSave(lang, stmt, code, sample, result, tag) {
-        console.log(lang, stmt, code, sample, result, tag)
         const data = this.state.data
         data[lang].statement[stmt].code = code
         data[lang].statement[stmt].result = result
